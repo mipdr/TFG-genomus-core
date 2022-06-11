@@ -1,21 +1,19 @@
-# Trabajo de Fin de Grado: *Título*
+# Trabajo de Fin de Grado: *Crear muchos problemas para solucionar unos pocos: Constitución de GenoMus como un proyecto a prueba de futuro (Working title)*
 
-**Este sería el README de tu proyecto. Consulta las [instrucciones de
-instalación](INSTALL.md)
+### Autor: Miguel Pedregosa Pérez
+### Tutores: Miguel Molina Solana, José López Montes
 
-### Autor(a): Nombre
-### Tutor(a)(es): Nombre(s)
+
 ___
 
 La documentación de este proyecto está realizada con `LaTeX`, por lo
 tanto para generar el archivo PDF necesitaremos instalar `TeXLive` en
 nuestra distribución.
 
-Una vez instalada, tan solo deberemos situarnos en el directorio `doc` y ejecutar:
+Una vez instalada, ejecutaremos:
 
-`
-$ pdflatex proyecto.tex
-`
+    pdflatex proyecto.tex
+
 
 Seguido por
 
@@ -30,7 +28,3 @@ O directamente
     make
     
 (que habrá que editar si el nombre del archivo del proyecto cambia)
-
-# INSTRUCCIONES
-
-Lee [INSTALL.md](INSTALL.md) para las instrucciones de uso.
