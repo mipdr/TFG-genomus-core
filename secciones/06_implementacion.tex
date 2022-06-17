@@ -1,6 +1,44 @@
 \chapter{Implementación}
 
-La implementación del software se ha dividido en hitos. Estos, han sido definidos en Github
-y cada uno de ellos contiene un grupo de \textit{issues} que se corresponden con las distintas
-mejoras que se han ido incorporando al software a lo largo de su desarrollo.\\
+Tras analizar el prototipo se propone la implementación de las funcionalidades y críticas de GenoMus en C++. Este subconjunto de las funcionalidades se desarrollará bajo el nombre de genomus-core. Se propone reutilizar las funcionalidades secundarias del prototipo de javascript. La totalidad del paquete se desarrollará bajo el nombre de genomus-js.
 
+Así, la base de código se dividirá en tres áreas: (???)
+
+\begin{enumerate} 
+    \item Una librería de C++ que implementa el modelo de datos y de cómputo de GenoMus: genomus-core\cite{genomus-core}.
+    \item Un módulo nativo de NodeJs (cita) que exponga una API de interación entre el runtime de JS y la biblioteca de C++: genomus-core-js\cite{genomus-core-js}.
+    \item Un módulo de npm que encapsule lo previamente enunciado y reutilize la lógica de I/O del prototipo: genomus-js.
+\end{enumerate}
+
+\section{genomus-core}
+
+\textbf{genomus-core} implementa el modelo de datos y de cómputo de GenoMus. 
+
+\subsection{Modelo de datos}
+
+Fácil
+
+\subsection{Modelo de cómputo}
+El modelo de cómputo de GenoMus está intrínsecamente basado en el paradigma de programación funcional. Esto hace que una implementación en C++ no sea trivial por diferentes motivos:
+
+\begin{itemize}
+    \item \textbf{Funciones dinámicas en tiempo de ejecución.} Las funciones de cómputo disponibles deben ser declarables en tiempo de ejecución. Ya que las funciones disponibles al modelo de cómputo son dependientes del estado del programa, es ideal que estas se puedan declarar dinámicamente en tiempo de ejecución. En la actual implementación, se proporciona una serie de funciones instanciadas en tiempo de carga.
+    
+    \item \textbf{Polimorfismo funcional.} Necesitamos construcciones que doten al modelo de cómputo de polimorfismo declarado en tiempo de ejecución. Debe ser posible no solo declarar nuevas funciones en tiempo de ejecución, sino también declarar nuevos tipos a usar como parámetros o salidas. Esto nos quita de la ecuación casi todos los constructos que C++ nos ofrece para conseguir polimorfismo dinámico, ya que el dominio del polimorfismo debe ser conocido en tiempo de compilación en C++. (cita requerida)
+    
+    \item \textbf{Árboles funcionales declarables y evaluables.} Toda instancia de cómputo debe no solo ser computable sino también almacenable. La instancia de árbol funcional debe existir independientemente de su evaluación. Así, una función de cómputo será un objeto invocable o functor cuya invocación contribuirá a la declaración del árbol funcional en memoria.
+    
+    (... ejemplo de código, diagrama de memoria(?))
+
+    Esto, además de ser necesario para el funcionamiento del software, posibilita el diseño de algoritmos de cómputo sobre el árbol funcional más allá del típico recorrido por profundidad. (cita requerida - por ejemplo haskell graph reduction machine)
+    
+    \item \textbf{Funciones enumerables en tiempo de ejecución.} Las funciones de cómputo disponibles en tiempo de ejecución deben ser enumerables y referenciables según los diferentes métodos de acceso(cita a donde se explican las cosas codificadas/decodificadas).
+\end{itemize}
+
+Todas estas características son bien incompatibles con la metodología de desarrollo orientado a objetos estándar de C++ o bien incompatibles con la máxima del proyecto de ser asequible para programadores amateur, si pretendemos seguir las buenas prácticas de C++. Por este motivo se toma la decisión de alejarse de la práctica principal de polimorfismo funcional y de datos definida en los últimos estándares de C++ (C++11, C++17(cita requerida)) para realizar una implementación mixta entre orientada a objetos clásica y orientada a prototipos(cita requerida). 
+
+Lo que nos aporta conceptualmente el diseño orientado a prototipos es la posibilidad de manejar parcialmente el tipado de nuestros objetos en tiempo de ejecución. Por otra parte, la principal desventaja que nos trae es la existencia de errores de tipado no conocidos por el compilador, lo cual es natural cuando lo que buscamos es precisamente declarar funciones de tipado arbitrario en tiempo de ejecución.
+
+Así, se nos presenta un compromiso entre la seguridad del código y la legibilidad de este. La implementación propuesta busca maximizar la legibilidad y flexibilidad del código minimizando la cantidad de comprobaciones de tipado en tiempo de ejecución. Además, se plantea mitigar el riesgo del tipado dinámico mediante la creación de tests de integración.
+
+\section{genomus-core-js}

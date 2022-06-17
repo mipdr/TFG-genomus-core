@@ -1,8 +1,47 @@
-\chapter{Planificación}
+\chapter{Planificación} 
 
 \section{Metodología utilizada}
 
+La metodología de diseño y desarrollo llevada a cabo está inspirada fuertemente por Scrum, con algunas modificaciones dadas las condiciones del proyecto. Además, se ha llevado acabo un proceso de TDD. Las condiciones del proyecto que han condicionado la propuesta de proyecto son las siguientes:
+
+\begin{itemize}
+    \item \textbf{El perfil de usuario final.} El software a desarrollar no es un producto de usuario en el sentido tradicional. Es una serie de herramientas de desarrollo que serán utilizadas por otros programadores. Así, nuestros usuarios son los desarrolladores que usarán el software.
+
+    \item \textbf{La complejidad del MVP.} El modelo de datos y cómputo de GenoMus\cite{GenoMus} está altamente entrelazado. Esto aumenta la complejidad de la creación de cortes verticales (cita requerida) de grupos funcionales que podrían corresponder a hitos (cita requerida).
+    
+    \item \textbf{La inestabilidad de la capacidad del equipo de desarrollo.} El equipo de desarrollo no se podía alejar más de lo defendido como ideal por Scrum (cita requerida). El desarrollo se ha llevado a cabo únicamente por el autor a modo de side-project (cita requerida).
+\end{itemize}
+
+Ante estas condiciones, se ha llevado a cabo un proceso de desarrollo con las siguientes características:
+
+\begin{itemize}
+    \item \textbf{División de las funcionalidades en historias agrupadas en hitos.} Las funcionalidades técnicas del producto se han dividido según el método usual en metodologías ágiles. 
+    
+    \item \textbf{División temporal del trabajo en sprints.} El tiempo de desarrollo se ha dividido en sprints como es usual. Los sprints del proyecto han contado con la peculiaridad de ser de tiempo variable debido a la capacidad variable de desarrollo. Los sprints han durado el tiempo necesario para completar los objetivos asignados. Finalmente, los sprints han durado una media de tres semanas.
+
+    \item \textbf{TDD como testeo de usuario hasta el despliegue del MVP.} Los flujos de usuario del prototipo trabajan con las estructuras de más alto nivel de GenoMus. Al ser estas estructuras dependientes del modelo de cómputo subyacente, se ha propuesto este modelo de cómputo junto con alguna funcionalidad básica como MVP. Al no respaldar ningún flujo de usuario, el desarrollo del MVP se ha realizado utilizando TDD como verificación de correctitud.
+    
+    \item \textbf{Planificación dinámica de historias e hitos.} El proyecto cuenta con varios ámbitos de incertidumbre los cuales han imposibilizado el análisis de requisitos funcionales completo previo al comienzo del desarrollo. Incluso la viabilidad del producto en el tiempo propuesto era desconocida. Así, el análisis completo de requisitos se ha llevado a cabo durante el desarrollo del MVP.
+\end{itemize}
 
 \section{Temporización}
 
+El proyecto ha sido planteado para su desarrollo entre marzo(?) y julio de 2022. Es decir cuatro meses de desarrollo.
+
 \section{Seguimiento del desarrollo}
+
+\subsection{Seguimiento de funcionalidades}
+Es proyecto ha sido instanciado como proyecto en Jira (cita requerida). Esto ha permitido disponer de un tablero estilo KanBan (cita requerida), un Backlog de producto (cita requerida) y de una herramienta de planificación de sprints.
+
+(imagen del kanban board)
+
+\subsection{Control de versiones}
+La totalidad del código cuenta con control de versiones a través de git y está alojado en repositorios en GitHub. Se ha seguido el siguiente flujo de git para posibilitar el desarrollo paralelo de funcionalidades y el despliegue de diferentes versiones del producto.
+
+explicar git flow
+
+\begin{itemize}
+    \item ramas
+    \item squash and merge
+    \item version tags
+\end{itemize}
