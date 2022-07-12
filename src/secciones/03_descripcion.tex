@@ -1,0 +1,64 @@
+\chapter{Descripción del problema}\label{cap:descripcion}
+
+\section{Abstracción musical y metaprogramación}
+
+La música tal y como la conocemos en nuestra sociedad es un fenómeno que se puede entender a través de la sucesiva construcción de lenguajes a diferentes niveles de abstracción sobre el fenómeno físico del sonido. A través del estudio de estos constructos sintácticos y semánticos podemos estudiar la respuesta cognitiva o emocional de las instancias de música en las personas. De esta misma manera, las instancias de música son describibles a cualquiera de estos niveles.
+
+GenoMus propone un framework de metaprogramación musical, sustentado por un modelo de cómputo funcional sobre datos musicales, y originariamente implementado sobre javascript. El software define transformaciones musicales como la repetición, concatenación o transporte y es capaz de declarar estructuras de transformaciones sobre datos musicales que proporcionan nuevos datos musicales al evaluarse. Las transformaciones definidas por GenoMus posibilitan la descripción de música en un nivel de abstracción mayor que el del modelo de datos musicales que maneja.
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{l | l}
+        \textbf{Nivel de abstracción} & \textbf{Conceptos medibles} \\ \hline \hline
+        Nivel físico & Ondas, frecuencia, amplitud \\
+        Nivel auditivo & Altura, timbre, intensidad, duración \\
+        Nivel cognitivo & Notas, voces, forma \\
+        Nivel cultural & Estilo, intención, emoción
+    \end{tabular}
+    \caption{Niveles de abstracción musical ordenados de menos a más abstracto.}
+    \label{tab:abstraccion_musical}
+\end{table}
+
+El nivel de abstracción del modelo de datos musicales de GenoMus se corresponde con el nivel de abstracción que podemos ver en una representación usual de música destinada a la interpretación por un músico o por un instrumento virtual, es decir la representación de la música en términos de notas y voces. De esta manera, las instancias de datos musicales manejadas por GenoMus pueden ser fácilmente representables en formatos legibles por personas o instrumentos virtuales, como partituras o MIDI\footnote{El formato MIDI es un formato estandarizado de codificación de datos musicales. Más información en la especificación oficial de las diferentes versiones del estándar, consultables en \url{https://www.midi.org/specifications/file-format-specifications}}.
+
+De esta manera, GenoMus es metaprogramación musical ya que declara estructuras de transformaciones musicales sobre datos musicales ya abstractos de por sí.
+
+\section{Genotipos y fenotipos musicales}
+
+GenoMus es capaz de declarar datos a dos niveles de abstracción los cuales denomina \textit{genotipos} y \textit{fenotipos} musicales. En palabras del autor \cite{GenoMus-aproximacion-creatividad}:
+
+\begin{quote}
+    \textit{El paradigma propuesto parte de los conceptos de genotipo y fenotipo musical. En biología un genotipo es el conjunto de los genes que existen en el núcleo celular de un organismo. El fenotipo es la realización visible del genotipo —esto es, el propio ser portador de los genes—, cuyos caracteres son el resultado de la interacción entre el genotipo y el medio. Esto explica que un mismo genotipo pueda dar lugar a fenotipos diferentes, como ocurre con los gemelos monocigóticos, quienes comparten un ADN idéntico pero se desarrollan como individuos bien diferenciados. \\ \\
+    El metalenguaje de GenoMus recurre a una analogía con estos conceptos. En este contexto, un genotipo musical es una expresión que combina procedimientos musicales tales como la repetición, la transposición o cualquier otra operación imaginable; un fenotipo musical es el fragmento musical concreto generado por un genotipo.}
+\end{quote}
+
+Conceptualmente podemos interpretar el genotipo musical como la descripción de la música a un nivel más alto, mientras que el fenotipo musical es en sí mismo una instancia musical.
+
+\section{El prototipo y la analogía del depurador}
+
+El proyecto GenoMus cuenta actualmente con un prototipo programado en javascript que implementa el modelo de cómputo y una serie de canales de entrada/salida para la interacción con el usuario a través de software de terceros como Max o Supercollider. La intención de este proyecto fin de grado es realizar una propuesta de implementación alternativa del modelo de cómputo que mejore las características de este, como se explicará en detalle en los próximos capítulos.
+
+Podemos entender la implementación que hace el prototipo de los algoritmos de evaluación de expresiones funcionales de GenoMus como un proceso de compilación en modo de depuración. El prototipo evalúa expresiones a especímenes, los cuales están conformados por un genotipo y un fenotipo, ambos en dos representaciones diferentes\footnote{Tanto los fenotipos como los genotipos se representan de dos formas: codificados y decodificados. La codificación o decodificación de los datos responde al formateo de estos para diferentes usos. Para más información, consultar el artículo original\cite{GenoMus-master}}. Esto significa que la evaluación de una expresión genotípica resulta en la instanciación de un espécimen, no de un fenotipo. Esto puede ser análogo a la inclusión de símbolos de depuración durante el proceso de compilación de un programa. Podemos detectar un \textit{overhead} por diseño en esta implementación del modelo de cómputo, cuya necesidad se analizará en capítulos posteriores.
+
+\subsection{\textit{``eval is evil''}}\label{ssec:eval_evil}
+
+Podemos decir que GenoMus declara un lenguaje, un lenguaje conformado por literales musicales y operadores de transformación. El prototipo implementa el intérprete de texto de expresiones GenoMus a través de la función \textit{eval} de javascript. Sin entrar en los problemas de eficiencia y seguridad que respaldan la célebre afirmación \textit{``eval is evil''} 
+    \footnote{
+    Popularizada por el error homónimo de JSLint, la expresión \textit{``eval is evil''} está respaldada por la concepción del uso de \textit{eval} en javascript como mala práctica. Un análisis de esto se puede consultar en la sección \textit{eval is Evil: The eval function is the most misused feature of JavaScript. Avoid it.} del libro \textit{JavaScript: The Good Parts}\cite{JavaScript_The_Good_Parts}}
+podemos decir que la utilización de \textit{eval} produce una duplicidad conceptual de las expresiones de GenoMus, que son tanto código javascript válido como datos del programa.
+
+\section{El prototipo como proyecto de software libre}
+
+El prototipo de GenoMus está liberado bajo licencia MIT y está disponible en un repositorio público en Github\cite{GenoMus}. Este repositorio no solo contiene una versión actualizada del código, sino también un histórico de versiones y diferentes conjuntos de datos producidos por el programa. En una primera instancia podemos ver que un control de versiones no gestionado por git y la inclusión de datos de salida del software aumentan considerablemente el tamaño del paquete de software con datos que quizá un contribuyente no necesite.
+
+Además de esto, podemos detectar que la base de código cuenta con muchas instancias de código duplicado o redundante, principalmente en la declaración de las estructuras de datos. Estas redundancias tienen su razón de ser en la naturaleza del prototipo y en su desarrollo iterativo a lo largo de los años, pero estas, junto a la ausencia de tipado estático y una convención de nombres de variables minimales, pueden aumentar la dificultad de aprendizaje del proyecto de un posible contribuyente.
+
+\section{Hipótesis}
+
+Este proyecto fin de carrera parte por tanto de la siguiente hipótesis:
+\\ \\
+\noindent\fbox{
+    \parbox{\textwidth}{
+        El prototipo actual de GenoMus es mejorable. Se pueden identificar campos funcionales en los que proponer mejoras que ayuden a la proyección del proyecto. Los ámbitos en los que esto se puede hacer son el ámbito técnico y el ámbito de experiencia de desarrollo.
+    }%
+}

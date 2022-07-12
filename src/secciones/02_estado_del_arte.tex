@@ -1,0 +1,30 @@
+\chapter{Estado del arte}
+
+
+\begin{quote}
+    [...] If a musician could ``jam'' with an unseen Jam Factory and with an unseen human musician for as long as desired and was unable to tell which was the human, than, according to the Turing test, Jam Factory would have exhibited ``intelligence''. \cite{musical_turing}
+\end{quote}
+
+
+Al igual que otros campos pertenecientes a las humanidades digitales, el estudio del fenómeno musical bajo la lente de la computación ha planteado diferentes cuestiones acerca de la creatividad artificial. La cuestión primigenia es la misma que en el resto de campos, y es equivalente a la cuestión formulada en el test de Turing: ¿puede una computadora replicar los comportamientos de un humano en el ámbito de la música? Dado que el abanico de prácticas musicales es amplio y diverso, esta pregunta requiere de especificación en los diferentes campos de computación musical. Proyectos como Magenta\footnote{Magenta es un proyecto de software libre perteneciente a Google que explora el rol de la inteligencia artifical en el proceso creativo. Más información en la página oficial (\url{https://magenta.tensorflow.org/}).} buscan el perfeccionamiento de la síntesis de sonido o material musical como proceso aislado. Otros proyectos como \textit{Piano Genie}\footnote{Más información en su página oficial \url{https://glitch.com/edit/\#!/piano-genie}} buscan la interactividad musical entre usuario y software.
+
+GenoMus se enmarca en el campo de la CAC (Composición Asistida por Computadora), campo cuya búsqueda principal es la de proporcionar al artista (el compositor) una extensión de su propia creatividad a través del uso de técnicas de composición automática. Este campo cuenta con una larga historia (en la escala de la historia de la computación) con multitud de planteamientos, algunos de los cuales se intentan explicar brevemente a continuación.
+
+\section{CAC a través de procesos matemáticos}
+
+Las aproximaciones que caen bajo el paraguas del análisis de procesos matemáticos sobre estructuras musicales tienen en común la utilización de transformaciones matemáticas sobre datos musicales que muchas veces están representados con la nota musical como grano indivisible. Podemos encontrar ejemplos del tratamiento algorítmico del material musical, que lo traduce a otras instancias musicales.
+
+En estas aproximaciones se introduce recurrentemente el concepto de \textit{música fractal}, instancias de música autosemejante procedentes de transformaciones algorítmicas de materiales musicales más simples. También podemos incluir en este grupo los trabajos realizados con autómatas celulares. Podemos ejemplificar este grupo con trabajo de Ninagawa\footnote{En el texto ``1/f Noise in Elementary Cellular Automaton Rule 110''\cite{Ninagawa}.} o de Richard French\cite{automata-repr}.
+
+\section{CAC a través de gramáticas}
+
+Estas aproximaciones tienen como elemento común la codificación de los procesos de composición usuales en gramáticas generativas. Este enfoque tiene una correspondencia directa con el análisis tradicional de la música, a través del cual se puede definir la música como un lenguaje describible por gramáticas no deterministas. Por ejemplo, la totalidad de la teoría armónica del periodo de la práctica común puede reducirse a un problema de combinatoria de datos musicales. No obstante, estas gramáticas están sujetos a movimientos o culturas musicales concretos, lo que hace muy difícil la obtención de una gramática que refleje fielmente la totalidad de procesos cognitivos que se dan en el fenómeno musical. En este campo podemos destacar el trabajo de F. Lerdahl y R. Jackendoff\cite{generative-theory}.
+
+\section{Evaluación y retroalimentación}
+
+La búsqueda de la extensión de la creatividad del compositor está abocada a la cooperación entre el sistema de composición automática elegido y las intenciones del compositor. Esto implica la necesidad de una evaluación estética por parte del usuario de los artificios del software utilizado, evaluación que se puede realizar de diferentes maneras. Desde la creación de productos basados en restricciones del compositor a través de algoritmos evolutivos hasta la propia modificación y aprendizaje del sistema generativo, esta interacción entre la evaluación del compositor y el sistema generador de música es lo que da valor estético o artístico al producto obtenido.
+
+GenoMus plantea un proceso de definición de restricciones sobre material musical, del cual hace uso el software para proporcional al compositor de instancias de música deseadas\cite{GenoMus-master}. La calidad y usabilidad de este flujo de comunicación quedará directamente determinada por la potencia del motor de cómputo subyacente, el cual posibilitará o no la interacción a tiempo real entre el compositor y el programa.
+
+
+

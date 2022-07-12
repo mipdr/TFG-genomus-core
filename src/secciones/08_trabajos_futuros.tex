@@ -1,0 +1,12 @@
+\chapter{Trabajos futuros}
+
+
+Como se ha explicado en el capítulo \ref{cap:implementacion}, la implementación del paquete \verb|genomus-js| no ha sido incluida en este proyecto fin de grado. Por este motivo, el principal trabajo a realizar tras la clausura de este proyecto es la implementación de las funcionalidades de \verb|genomus-js|, ya sea mediante un total rediseño de las funcionalidades o mediante la reutilización de código del prototipo. En este paquete se incluirían funcionalidades como:
+
+\begin{itemize}
+    \item Integración con los distintos software de terceros que conforman las interfaces de usuario de GenoMus.
+    \item Funcionalidades de alto nivel como la creación de genotipos basados en características del fenotipo que producen.
+    \item Un corpus completo de funciones GenoMus.
+\end{itemize}
+
+Por otra parte, tras la finalización de este proyecto fin de grado también se da la posibilidad de realizar un proceso de optimización del código implementado. Debido a las dificultades de desarrollo expuestas en la sección \ref{ssec:dificultades}, se presentan diferentes procedimientos cuyo rendimiento es mejorable. Tras analizar los diferentes ejecutables con \verb|gprof|, se puede ver que los ejecutables realizan una gran cantidad de copias innecesarias de datos, las cuales podrían ser probablemente evitadas mediante el uso de referencias en más lugares del código. Otro planteamiento posible sería la introducción de procesamiento paralelo en el motor de cómputo.

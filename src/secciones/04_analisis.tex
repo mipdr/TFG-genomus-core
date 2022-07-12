@@ -1,0 +1,85 @@
+\chapter{Análisis del problema}
+
+Las cuestiones planteadas entran dentro del ámbito técnico del proyecto GenoMus, es decir que afectan exclusivamente al software que implementa el modelo matemático propuesto por GenoMus. Así, se plantea un problema de diseño y desarrollo sobre la base teórica del proyecto con el precedente del prototipo existente.
+
+El proceso de análisis previo y diseño de la arquitectura incluirá un análisis de requisitos funcionales basado en el marco teórico computacional y de un análisis técnico del prototipo orientado a la detección de posibles mejoras en tres principales ámbitos: experiencia de desarrollo o DX, eficiencia del software y escalabilidad en funcionalidades. Así, el proceso de diseño tiene como meta el proporcionar al software final de las siguientes características:
+
+\begin{itemize}
+    \item \textbf{Excelente experiencia de desarrollo} para futuros contribuyentes al proyecto. El código debe poder ser entendido y mantenido por un programador amateur. Al pertenecer al campo de las humanidades digitales tenemos que tener en cuenta a los usuarios con perfiles no técnicos. Por esto la legibilidad, simplicidad y declaratividad del código son prioritarias. Dado que el marco teórico del proyecto GenoMus no es trivial, optaremos por la máxima de favorecer el desarrollo de software complejo frente al desarrollo de software complicado\footnote{Más información sobre estos conceptos en el siguiente artículo divulgativo. \url{https://dev.to/maurofrezza/complex-software-vs-complicated-software-cid}}.
+    
+    \item \textbf{Eficiencia}. El programa debe ser lo más eficiente posible en regiones de cómputo intensivo. Se aspira a que el límite en el volumen o complejidad de datos que el programa genera no repercuta sobre la capacidad de creación del usuario ni sobre la usabilidad del software.
+    
+    \item \textbf{Transparencia en la escalabilidad de funcionalidades} en el modelo de datos y de cómputo. El software debe ser lo suficientemente flexible y genérico como para permitir la declaración de nuevas funcionalidades dentro del modelo de cómputo sin necesidad de alterar las estructuras básicas de este.
+\end{itemize}
+
+En las siguientes secciones se expone el proceso de análisis de GenoMus que ha llevado a la propuesta de diseño e implementación que se describirá en detalle en el siguiente capítulo. 
+
+\section{Análisis del prototipo}
+ 
+Como se ha mencionado previamente, Actualmente el proyecto GenoMus cuenta con una implementación prototipo: el software GenoMus\cite{GenoMus}. Este prototipo está implementado en javascript puro\footnote{Refiriéndose a javascript estándar. La base de código no está construida sobre ninguna librería o framework de javascript. En este caso, el código sigue el estándar ES6\cite{es6} publicado en 2015.} para ejecución sobre NodeJS. La sintaxis utilizada busca la utilización del dialecto funcional de javascript\footnote{Refiriéndose al estilo de programación que favorece las construcciones sintácticas inspiradas en el paradigma funcional que ofrece javascript.}. Tanto el modelo de representación de datos como el modelo de cómputo siguen generalmente patrones de diseño de programación funcional. Este software presenta integraciones con otros de terceros como Max\footnote{Max es un software propietario de Cycling 74, proporciona un framework de programación visual orientado a síntesis de audio y multimedia interactiva. Más información en \url{https://cycling74.com/products/max}} o Supercollider\footnote{Supercollider es una plataforma de síntesis de sonido y composición algorítmica liberada bajo licencia GPL3.0. Más información en \url{https://supercollider.github.io/}} para renderizar en partituras o audio las salidas del modelo de cómputo.
+
+\subsection{Ventajas e inconvenientes de javascript funcional}
+
+Las funcionalidades de javascript inspiradas en el paradigma funcional introducidas en las diferentes especificaciones del lenguaje de la última década y media han posibilitado la transición hacia el establecimiento del dialecto funcional como corriente dominante en el mundo javascript. Desde la introducción de la tríada de operadores sobre listas \verb|map, filter y fold/reduce|\footnote{
+    Principales funciones de orden superior sobre listas presentes en los principales lenguajes del paradigma funcional. Una extensa descripción de sus implicaciones y propiedades se puede encontrar en la sección 2.2 del libro Structure and Interpretation of Computer Programs\cite{sicp}. Una menos extensa pero más asequible versión del texto puede encontrarse en las siguientes diapositivas publicadas en homenaje al libro por Philip Schwarz bajo el siguiente enlace. \url{https://www.slideshare.net/pjschwarz/the-functional-programming-triad-of-map-filter-and-fold}
+} en ES5\cite{es5} hasta la inclusión de azúcar sintáctico para dotar a las funciones anónimas de un aspecto de funciones de combinatoria en forma de las \verb|arrow functions|\footnote{especificadas en la sección 14.2 del estándar ECMA-262 6ª edición, o ES6 \cite{es6}} hemos visto como el dialecto funcional se ha extendido a librerías como ReactJS\footnote{Refiriéndose al cambio de paradigma introducido en la versión 16.8 de React en el que se introdujo la declaración funcional de componentes. Más información en el artículo introductorio de React. \url{https://reactjs.org/docs/hooks-intro.html}} o al paradigma Redux de gestión de estado en aplicaciones de una página\footnote{Refiriéndose a la práctica común de gestión de estado en frontend a través de reductores popularizada por la bibilioteca Redux. Más información sobre Redux en su documentación oficial. \url{https://redux.js.org/api/api-reference}}.
+
+El javascript funcional moderno nos proporciona azúcar sintáctico sobre la creación de objetos dinámicos que nos da la posiblidad de implementar entidades como clausuras o funciones de orden superior. Sin embargo estas construcciones no están acompañadas de un respaldo acorde en los distintos entornos de ejecución de javascript. Las características que dotan a los lenguajes funcionales de su poder, como máquinas de reducción de grafos\cite{haskell-wiki-STG} o procedimientos de composición funcional\cite{haskell-wiki-FC}, están ausentes en el mundo javascript.
+
+La composición de funciones es la característica cuya ausencia puede haber condicionado el desarrollo del prototipo. El prototipo implementa un procedimiento de almacenamiento de árboles funcionales a través de cadenas de texto. Las diferentes construcciones funcionales se almacenan como código javascript, de cuya ejecución se obtiene la evaluación del árbol. Este tipo de metaprogramación aumenta el cómputo necesario para evaluar árboles de funciones, ya que se introduce una etapa de construcción de código y una etapa de parseo de este, validación y posterior ejecución.
+
+\subsection{Problemas del prototipo}
+El prototipo de GenoMus presenta características a mejorar en los tres ámbitos mencionados previamente: DX, eficiencia y escalabilidad. En el ámbito de la experiencia de desarrollo, el prototipo podría contar con características como control de versiones o tipado de código con Typescript que harían el abordaje del proyecto por nuevos colaboradores más asequible. En el ámbito de la eficiencia, GenoMus presenta un modelo de cómputo determinista sobre un conjunto infinito de entradas de longitud arbitrariamente grande que produce salidas también arbitrariamente grandes. Como ocurre en todas las implementaciones de modelos de cómputo con estas características, el dominio de instancias computacionales realizables está sesgado por las capacidades computacionales de la máquina donde se ejecuta el software. El problema recae en que esto es detectable por el usuario durante el uso cotidiano del software. Por último en el ámbito de la escalabilidad de funcionalidades, GenoMus presenta el problema de la escasez en el uso de estructuras abstractas de alto nivel que definiesen la totalidad de la lógica de cómputo, permitiendo la definición de nuevos procedimientos de cómputo sobre la marcha.
+
+\section{Propuesta planteada}
+
+El abanico de propuestas ha incluido desde la optimización a alto nivel del prototipo hasta la reescritura en un lenguaje compilado de este. Las ventajas e inconvenientes de cada uno de los puntos intermedios se rige por el compromiso entre tiempo de desarrollo y nivel de abstracción. La implementación del modelo en un lenguaje compilado tiene como principal ventaja de la eficiencia en tiempo de ejecución, además de la muy probable introducción de un sistema de tipado del código que aumenta la seguridad de este. Por otro lado tiene desventajas como la dificultad del desarrollo, la complejidad añadida de la compilación para diferentes plataformas y la complejidad de la migración de integraciones con terceros a un nuevo lenguaje. El enfoque contrario tiene exactamente las ventajas y desventajas opuestas. En resumidas cuentas se ha planteado una balanza entre calidad del producto y medios de desarrollo necesarios.
+
+La migración completa a una base de código compilado se descartó desde un comienzo, siendo decisiva para ello la cuestión de la migración de integraciones. Por otro lado la migración a un lenguaje compilado del modelo de datos y del modelo de cómputo se demuestra necesaria para el propósito del proyecto. Así, la decisión principal sobre la arquitectura del proyecto ha sido la de definir la línea entre funcionalidades base a implementar en un lenguaje compilado y funcionalidades de alto nivel a mantener del prototipo.
+
+\subsection{Diseño de la arquitectura y elección de tecnologías}
+
+La definición de la arquitectura del software a desarrollar se basa en la elección de un stack de tecnologías sobre las que diseñar y desarrollar la base de código. Se puede decir que la implementación de funcionalidades y por tanto la base de código estará intrínsecamente dividida según los lenguajes y tecnologías sobre los que se implemente cada funcionalidad. Se definen los dos siguientes grupos disjuntos:
+
+\begin{itemize}
+    \item \textbf{Funcionalidades de alto nivel conceptual.} Grupo que incluye como mínimo las integraciones con software de terceros. Incluyen procedimientos de entrada/salida para los cuales un lenguaje interpretado puede ser apropiado.
+    
+    \item \textbf{Funcionalidades de bajo nivel conceptual.} Grupo de que incluye como mínimo el modelo de datos y el modelo de cómputo. Sobre estas funcionalidades recaen los procedimientos de cómputo intensivo, siendo así el principal cuello de botella del software.
+\end{itemize}
+
+Las diferentes funcionalidades o capacidades de cómputo sobre el modelo de datos de GenoMus forman la mayoría de las veces un cauce lineal de procesamiento de datos. La entrada del programa describe siempre una expresión a evaluar, evaluación que se traduce en una serie de operaciones de cómputo de más bajo nivel
+
+Una vez hecha esta división de la lógica del cauce de procesamiento de datos de GenoMus, podemos ver cómo la implementación resultante corresponderá con una arquitectura en dos etapas.
+
+Una consecuencia directa de la división de la implementación de diferentes funcionalidades sobre diferentes tecnologías es la complejidad añadida de diseño e implementación de canales de comunicación entre las diferentes tecnologías.
+
+Finalmente, se elige C++ como tecnología sobre la cual implementar las funcionalidades de más bajo nivel por los siguientes motivos:
+
+\begin{itemize}
+    \item Permite un suficiente nivel de optimización para los propósitos de este proyecto.
+    \item Existen librerías de integración de C++ con la totalidad de los lenguajes de uso extendido en la industria. En el caso de JS con NodeJS, existen diversas librerías que deberían facilitar la comunicación entre C++ y el runtime de JS.
+    \item Hereda la sintaxis de C, que a día de hoy conforma gran parte del imaginario colectivo de la industria sobre programación imperativa\footnote{
+        Refiriéndose al conjunto de prácticas en el ámbito de la programación provenientes del lenguaje C que actúan como lengua franca del mundo de las tecnologías. Una descripción de este fenómeno se puede encontrar en el artículo \textit{C Is Not a Low-Level Language} \cite{C-is-not-a-language}.
+    }, lo cual lo hace abordable para cualquier programador con experiencia en Java, Javascript, C\#, C... etc
+    \item Sigue el paradigma \textit{write-once-compile-anywhere}, por lo que con el sistema de construcción adecuado podremos considerar el código como portable a cualquier plataforma.
+\end{itemize}
+
+\subsection{Tecnologías complementarias. DevOps}
+
+Una vez escogidas las tecnologías sobre las que desarrollar el software, se plantea un análisis de los requisitos del proceso de desarrollo presentes y futuros para establecer una infraestructura de soporte del desarrollo.
+
+Como se ha mencionado antes, uno de los objetivos del proyecto es el establecimiento de GenoMus como proyecto de software libre asequible y atractivo a posibles colaboradores. Esto, unido a que se debe tener en cuenta a perfiles no técnicos como posibles futuros colaboradores, fomenta la necesidad de estandarizar y asegurar el correcto funcionamiento del ciclo de vida del software.
+
+Se deciden utilizar las siguientes tecnologías para la duración de este proyecto:
+
+\begin{itemize}
+    \item \verb|git| para el control de versiones.
+    \item \verb|Gitflow|\cite{GitFlow} para la administración y control de ramas de \verb|git|.
+    \item \verb|GitHub| para el alojamiento de los repositorios públicos.
+    \item \verb|TDD| o Test Driven Development, para asegurar el correcto funcionamiento del software durante sus diferentes iteraciones.
+    \item \verb|Github Workflows|\footnote{
+        Github Workflows es la herramienta proporcionada por Github para ejecutar flujos de trabajo definidos por el usuario. Más información en la página oficial (\url{https://docs.github.com/en/get-started/getting-started-with-git/git-workflows}).
+    } para lanzamiento los tests automáticos resultantes del TDD.
+    \item \textbf{Versionado semántico} o SemVer para el correcto etiquetado de las diferentes iteraciones del software.
+\end{itemize}
+ 
