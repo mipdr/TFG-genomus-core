@@ -1,5 +1,4 @@
-# Trabajo de Fin de Grado: *Contribuciones a GenoMus*
-## Rediseño de un motor de cómputo funcional sobre estructuras musicales
+# Trabajo de Fin de Grado: *Contribuciones a GenoMus: Rediseño de un motor de cómputo funcional sobre estructuras musicales*
 
 ### Autor: Miguel Pedregosa Pérez
 ### Tutores: Miguel Molina Solana, José López Montes
